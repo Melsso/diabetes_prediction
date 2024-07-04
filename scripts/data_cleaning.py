@@ -13,9 +13,9 @@ data = pd.read_csv(data_path)
 result = data.fillna(data.median()).infer_objects(copy=False)
 
 # Standardize the features
-scaler = StandardScaler()
-columns_to_scale = ['Pregnancies', 'Age', 'Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction']
-result[columns_to_scale] = scaler.fit_transform(result[columns_to_scale])
+# scaler = StandardScaler()
+# columns_to_scale = ['Pregnancies', 'Age', 'Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction']
+# result[columns_to_scale] = scaler.fit_transform(result[columns_to_scale])
 
 # Set feature names
 result.columns = ['Pregnancies', 'Glucose', 'BloodPressure', 'SkinThickness', 'Insulin', 'BMI', 'DiabetesPedigreeFunction', 'Age', 'Outcome']

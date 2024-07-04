@@ -21,22 +21,8 @@ class DiabetesPredictor:
         return X_train, y_train
 
     def train_model(self, X_train, y_train):
-        param_grid = {
-            'C': [0.001, 0.01, 0.1, 1, 10, 100],
-            'solver': ['liblinear', 'newton-cg', 'lbfgs', 'sag', 'saga'],
-            'max_iter': [100, 500, 1000]
-        }
-        # Create a logistic regression model
-        self.model = LogisticRegression(class_weight='balanced')
-
-        # Perform grid search with cross-validation
-        grid_search = GridSearchCV(estimator=self.model, param_grid=param_grid, cv=5)
-        grid_search.fit(X_train, y_train)
-
-        # Set the model with the best parameters found
-        self.model = grid_search.best_estimator_
-
-        print("Best Parameters:", grid_search.best_params_)
+        self.model = LogisticRegression(max_iter=1000)
+        self.model.fit(X_train, y_train)
 
     def save_model(self):
         dump(self.model, self.model_save_path)

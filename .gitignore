@@ -1,0 +1,27 @@
+# Ignore data files
+data/raw/*
+data/processed/*
+
+# Do not ignore the placeholder files in these directories
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Ignore model files
+models/*
+
+# Do not ignore the placeholder file in the models directory
+!models/.gitkeep
+
+# Ignore virtual environment
+venv/
+
+# Ignore Jupyter Notebook checkpoints
+notebooks/.ipynb_checkpoints/
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+
+# Ignore IDE/editor configuration files
+.vscode/
+.idea/

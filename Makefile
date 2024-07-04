@@ -20,11 +20,11 @@ data_clean:
 
 # Train the model
 train:
-	$(PYTHON) scripts/training.py
+	$(PYTHON) scripts/train_model.py
 
 # Evaluate the model
 evaluate:
-	$(PYTHON) scripts/evaluation.py
+	$(PYTHON) scripts/evaluate_model.py
 
 # Run everything
 run: clean data_clean train evaluate

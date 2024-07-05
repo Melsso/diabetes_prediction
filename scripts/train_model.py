@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV
 from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import GridSearchCV
 from joblib import dump
 import os
 
@@ -20,19 +21,37 @@ class DiabetesPredictor:
         y_train = pd.read_csv(self.y_train_path, header=None).values.ravel()
         return X_train, y_train
 
+    # def train_model(self, X_train, y_train):
+    #     param_grid = [
+    #         {'penalty': ['l2'], 'C': [1, 10, 100], 'solver': ['lbfgs', 'newton-cg', 'sag'], 'max_iter': [3000, 4000], 'class_weight': [None, 'balanced']},
+    #         {'penalty': ['l2', 'l1'], 'C': [1, 10, 100], 'solver': ['liblinear'], 'max_iter': [3000, 4000], 'class_weight': [None, 'balanced']},
+    #         {'penalty': ['elasticnet'], 'C': [1, 10, 100], 'solver': ['saga'], 'max_iter': [3000, 4000], 'class_weight': [None, 'balanced'], 'l1_ratio': [0.5, 0.7, 0.9]}
+    #     ]
+        
+    #     grid_search = GridSearchCV(LogisticRegression(), param_grid, cv=3)
+    #     grid_search.fit(X_train, y_train)    
+        
+    #     # Store the best model in the class attribute
+    #     self.model = grid_search.best_estimator_
+        
+    #     # Print best parameters found
+    #     print("Best parameters found: ", grid_search.best_params_)
     def train_model(self, X_train, y_train):
-        param_grid = {
-            'C': [0.001, 0.01, 0.1, 1, 10, 100, 1000],
-            'solver': ['liblinear', 'lbfgs'],
-            'max_iter': [50, 100, 250, 500, 1000, 1500]
-        }
-        self.model = LogisticRegression()
-        grid_search = GridSearchCV(estimator=self.model, param_grid=param_grid, cv=4, scoring='accuracy')
-        grid_search.fit(X_train, y_train)
+        param_grid = [
+            {'penalty': ['l2'], 'C': [0.001, 0.01, 0.1, 1, 10, 100], 'solver': ['lbfgs', 'newton-cg', 'sag'], 'max_iter': [500, 1000, 5000, 7000, 10000, 16000, 20000], 'class_weight': [None, 'balanced']},
+            {'penalty': ['l2', 'l1'], 'C': [0.001, 0.01, 0.1, 1, 10, 100], 'solver': ['liblinear'], 'max_iter': [500, 1000, 5000, 7000, 10000, 16000, 20000], 'class_weight': [None, 'balanced']},
+            {'penalty': ['elasticnet'], 'C': [0.001, 0.01, 0.1, 1, 10, 100], 'solver': ['saga'], 'max_iter': [500, 1000, 5000, 7000, 10000, 16000, 20000], 'class_weight': [None, 'balanced'], 'l1_ratio': [0.1, 0.2, 0.4, 0.3, 0.5, 0.6, 0.7, 0.8, 0.9]}
+        ]
+        
+        grid_search = GridSearchCV(LogisticRegression(), param_grid, cv=4)
+        grid_search.fit(X_train, y_train)    
+        
+        # Store the best model in the class attribute
         self.model = grid_search.best_estimator_
-        print("Best parameters:", grid_search.best_params_)
-        print("Best cross-validation score:", grid_search.best_score_)
-
+        
+        # Print best parameters found
+        print("Best parameters found: ", grid_search.best_params_)
+                
     def save_model(self):
         dump(self.model, self.model_save_path)
         print(f"Model saved to {self.model_save_path}")
@@ -50,4 +69,3 @@ if __name__ == "__main__":
 
     predictor.train_model(X_train, y_train)
     predictor.save_model()
- 

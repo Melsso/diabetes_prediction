@@ -21,8 +21,17 @@ class DiabetesPredictor:
         return X_train, y_train
 
     def train_model(self, X_train, y_train):
-        self.model = LogisticRegression(max_iter=1000)
-        self.model.fit(X_train, y_train)
+        param_grid = {
+            'C': [0.001, 0.01, 0.1, 1, 10, 100, 1000],
+            'solver': ['liblinear', 'lbfgs'],
+            'max_iter': [50, 100, 250, 500, 1000, 1500]
+        }
+        self.model = LogisticRegression()
+        grid_search = GridSearchCV(estimator=self.model, param_grid=param_grid, cv=4, scoring='accuracy')
+        grid_search.fit(X_train, y_train)
+        self.model = grid_search.best_estimator_
+        print("Best parameters:", grid_search.best_params_)
+        print("Best cross-validation score:", grid_search.best_score_)
 
     def save_model(self):
         dump(self.model, self.model_save_path)
@@ -41,3 +50,4 @@ if __name__ == "__main__":
 
     predictor.train_model(X_train, y_train)
     predictor.save_model()
+ 
